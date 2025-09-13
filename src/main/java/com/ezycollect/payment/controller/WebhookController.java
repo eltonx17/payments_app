@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import static com.ezycollect.payment.config.PaymentConstants.REGISTER_WEBHOOK_SU
 @RestController
 @RequestMapping("/v1/webhooks")
 @AllArgsConstructor
+@CrossOrigin
 public class WebhookController {
 
     @Autowired
@@ -34,7 +36,7 @@ public class WebhookController {
         try {
             webhookService.registerWebhook(registerWebhookRequest.getUrl());
             return ResponseEntity.ok(new RegisterWebhookResponse(REGISTER_WEBHOOK_SUCCESS));
-        } catch (DatabaseException e) {
+        } catch (DatabaseException | IllegalArgumentException e) {
             return new ResponseEntity<>(new RegisterWebhookResponse(REGISTER_WEBHOOK_FAILED), HttpStatus.BAD_REQUEST);
         }
     }

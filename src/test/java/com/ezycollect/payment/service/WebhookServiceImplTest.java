@@ -4,12 +4,10 @@ import com.ezycollect.payment.dto.model.Payment;
 import com.ezycollect.payment.dto.model.Webhook;
 import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.repository.WebhookRepository;
+import com.ezycollect.payment.util.UrlValidationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -30,6 +28,9 @@ class WebhookServiceImplTest {
 
     @Mock
     private WebhookNotificationService webhookNotificationService;
+
+    @Spy
+    UrlValidationUtils urlValidationUtils;
 
     @InjectMocks
     private WebhookServiceImpl webhookService;

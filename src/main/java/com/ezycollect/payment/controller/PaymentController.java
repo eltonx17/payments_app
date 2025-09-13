@@ -17,6 +17,7 @@ import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_FAILED;
 @RestController
 @RequestMapping("/v1/payments")
 @Slf4j
+@CrossOrigin
 public class PaymentController {
 
     private final PaymentService paymentService;

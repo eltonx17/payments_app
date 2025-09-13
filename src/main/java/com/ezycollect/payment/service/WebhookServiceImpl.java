@@ -4,7 +4,9 @@ import com.ezycollect.payment.dto.model.Payment;
 import com.ezycollect.payment.dto.model.Webhook;
 import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.repository.WebhookRepository;
+import com.ezycollect.payment.util.UrlValidationUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class WebhookServiceImpl implements WebhookService {
 
     private final WebhookRepository webhookRepository;
     private final WebhookNotificationService webhookNotificationService;
+
+    private static UrlValidationUtils urlValidationUtils;
 
     public WebhookServiceImpl(WebhookRepository webhookRepository, WebhookNotificationService webhookNotificationService) {
         this.webhookRepository = webhookRepository;
@@ -64,6 +68,9 @@ public class WebhookServiceImpl implements WebhookService {
      */
     @Override
     public void registerWebhook(String url) {
+        if(!url.isEmpty() && !urlValidationUtils.validateUrl(url)) {
+            throw new IllegalArgumentException("Invalid URL format");
+        }
         Webhook webhook = new Webhook();
         webhook.setUrl(url);
         try {
