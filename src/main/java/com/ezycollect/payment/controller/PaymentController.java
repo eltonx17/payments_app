@@ -3,16 +3,16 @@ package com.ezycollect.payment.controller;
 import com.ezycollect.payment.dto.CreatePaymentRequest;
 import com.ezycollect.payment.dto.CreatePaymentResponse;
 import com.ezycollect.payment.exception.DatabaseException;
-import com.ezycollect.payment.mapper.PaymentMapper;
-import com.ezycollect.payment.model.Payment;
+import com.ezycollect.payment.dto.mapper.PaymentMapper;
+import com.ezycollect.payment.dto.model.Payment;
 import com.ezycollect.payment.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.ezycollect.payment.constants.PaymentConstants.PAYMENT_CREATED;
-import static com.ezycollect.payment.constants.PaymentConstants.PAYMENT_FAILED;
+import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_CREATED;
+import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_FAILED;
 
 @RestController
 @RequestMapping("/v1/payments")

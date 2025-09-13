@@ -1,4 +1,4 @@
-package com.ezycollect.payment.model;
+package com.ezycollect.payment.dto.model;
 
 import jakarta.persistence.*;
 import lombok.Data;

@@ -1,8 +1,8 @@
 package com.ezycollect.payment.service;
 
 import com.ezycollect.payment.exception.DatabaseException;
-import com.ezycollect.payment.model.Payment;
-import com.ezycollect.payment.model.Webhook;
+import com.ezycollect.payment.dto.model.Payment;
+import com.ezycollect.payment.dto.model.Webhook;
 import com.ezycollect.payment.repository.WebhookRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

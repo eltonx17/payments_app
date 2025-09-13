@@ -1,6 +1,6 @@
 package com.ezycollect.payment.repository;
 
-import com.ezycollect.payment.model.WebhookAudit;
+import com.ezycollect.payment.dto.model.WebhookAudit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.ezycollect.payment.service;
 
 import com.ezycollect.payment.dto.CreatePaymentRequest;
-import com.ezycollect.payment.model.Payment;
+import com.ezycollect.payment.dto.model.Payment;
 
 public interface PaymentService {
 

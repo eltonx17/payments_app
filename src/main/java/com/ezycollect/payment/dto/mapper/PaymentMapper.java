@@ -1,8 +1,8 @@
-package com.ezycollect.payment.mapper;
+package com.ezycollect.payment.dto.mapper;
 
 import com.ezycollect.payment.dto.CreatePaymentRequest;
 import com.ezycollect.payment.dto.CreatePaymentResponse;
-import com.ezycollect.payment.model.Payment;
+import com.ezycollect.payment.dto.model.Payment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

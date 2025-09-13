@@ -1,4 +1,4 @@
-package com.ezycollect.payment.constants;
+package com.ezycollect.payment.config;
 
 public class PaymentConstants {
     public static final String PAYMENT_CREATED = "PAYMENT_CREATED";

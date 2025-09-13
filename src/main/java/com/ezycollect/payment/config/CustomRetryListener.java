@@ -1,7 +1,7 @@
 package com.ezycollect.payment.config;
 
 import com.ezycollect.payment.exception.RetriesExhaustedException;
-import com.ezycollect.payment.model.WebhookAudit;
+import com.ezycollect.payment.dto.model.WebhookAudit;
 import com.ezycollect.payment.repository.WebhookAuditRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

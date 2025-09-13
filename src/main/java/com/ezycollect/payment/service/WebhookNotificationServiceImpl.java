@@ -1,7 +1,7 @@
 package com.ezycollect.payment.service;
 
-import com.ezycollect.payment.model.Payment;
-import com.ezycollect.payment.model.Webhook;
+import com.ezycollect.payment.dto.model.Payment;
+import com.ezycollect.payment.dto.model.Webhook;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.support.RetryTemplate;

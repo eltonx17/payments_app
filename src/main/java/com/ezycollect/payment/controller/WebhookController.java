@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.ezycollect.payment.constants.PaymentConstants.REGISTER_WEBHOOK_FAILED;
-import static com.ezycollect.payment.constants.PaymentConstants.REGISTER_WEBHOOK_SUCCESS;
+import static com.ezycollect.payment.config.PaymentConstants.REGISTER_WEBHOOK_FAILED;
+import static com.ezycollect.payment.config.PaymentConstants.REGISTER_WEBHOOK_SUCCESS;
 
 @RestController
 @RequestMapping("/v1/webhooks")
