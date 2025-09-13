@@ -1,0 +1,31 @@
+meta {
+  name: Payment
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:8080/v1/payments/create
+  body: json
+  auth: apikey
+}
+
+headers {
+  X-API-KEY: test-api-key
+}
+
+auth:apikey {
+  key: 
+  value: test-api-key
+  placement: queryparams
+}
+
+body:json {
+  {
+    "requestId": "4",
+    "firstName": "Jane Smith",
+    "lastName": "Smith",
+    "zipCode": "11",
+    "cardNumber": "4242-4242-4242-4242"
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Webhook
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/v1/webhooks/create
+  body: json
+  auth: none
+}
+
+headers {
+  X-API-KEY: test-api-key
+}
+
+body:json {
+  {
+    "url": "https://api.restful-api.dev/objects"
+  }
+}
