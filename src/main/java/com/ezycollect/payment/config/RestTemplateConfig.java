@@ -11,6 +11,11 @@ import java.time.Duration;
 @Configuration
 public class RestTemplateConfig {
 
+    /**
+     * Configure RestTemplate with custom timeouts to avoid hanging requests.
+     * @param builder
+     * @return
+     */
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();

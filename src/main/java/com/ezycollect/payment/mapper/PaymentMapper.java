@@ -6,6 +6,10 @@ import com.ezycollect.payment.model.Payment;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+/**
+ * MapStruct Mapper for converting between Payment entity and DTOs.
+ */
+
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {
 

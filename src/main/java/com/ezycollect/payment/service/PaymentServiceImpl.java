@@ -1,6 +1,7 @@
 package com.ezycollect.payment.service;
 
 import com.ezycollect.payment.dto.CreatePaymentRequest;
+import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.exception.RetriesExhaustedException;
 import com.ezycollect.payment.mapper.PaymentMapper;
 import com.ezycollect.payment.model.Payment;
@@ -25,6 +26,11 @@ public class PaymentServiceImpl implements PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
+    /**
+     * Create a new payment, save to DB, and notify webhooks asynchronously
+     * @param createPaymentRequest
+     * @return Saved Payment object
+     */
     @Override
     public Payment createPayment(CreatePaymentRequest createPaymentRequest) {
         Payment payment = paymentMapper.toModel(createPaymentRequest);
@@ -32,9 +38,10 @@ public class PaymentServiceImpl implements PaymentService {
         Payment savedPayment;
         try {
             savedPayment = paymentRepository.save(payment);
+            log.info("DB Insert successful");
         } catch (Exception e) {
             log.error("Failed to save payment to DB - {}", e.getMessage());
-            throw new RetriesExhaustedException("Database is down or nonresponsive", e);
+            throw new DatabaseException("Database is down or nonresponsive", e);
         }
         CompletableFuture.runAsync(() -> {
             try {

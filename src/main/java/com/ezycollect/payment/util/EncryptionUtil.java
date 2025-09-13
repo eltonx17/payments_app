@@ -12,6 +12,11 @@ public class EncryptionUtil {
     private static final String KEY = "0123456789abcdef0123456789abcdef"; // 32 chars = 256 bits
     private static final String IV = "abcdef9876543210"; // 16 chars = 128 bits
 
+    /**
+     * Encrypts the given data using AES/CBC/PKCS5Padding
+     * @param data
+     * @return
+     */
     public static String encrypt(String data) {
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
@@ -25,6 +30,12 @@ public class EncryptionUtil {
         }
     }
 
+    /**
+     * Decrypts the given data using AES/CBC/PKCS5Padding
+     * Unused method, but could be useful for testing or future requirements.
+     * @param data
+     * @return
+     */
     public static String decrypt(String data) {
         try {
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");

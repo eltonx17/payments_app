@@ -2,6 +2,7 @@ package com.ezycollect.payment.controller;
 
 import com.ezycollect.payment.dto.RegisterWebhookRequest;
 import com.ezycollect.payment.dto.RegisterWebhookResponse;
+import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.service.WebhookService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class WebhookController {
         try {
             webhookService.registerWebhook(registerWebhookRequest.getUrl());
             return ResponseEntity.ok(new RegisterWebhookResponse(REGISTER_WEBHOOK_SUCCESS));
-        } catch (Exception e) {
+        } catch (DatabaseException e) {
             return new ResponseEntity<>(new RegisterWebhookResponse(REGISTER_WEBHOOK_FAILED), HttpStatus.BAD_REQUEST);
         }
     }

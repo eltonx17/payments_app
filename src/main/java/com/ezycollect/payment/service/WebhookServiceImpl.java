@@ -1,6 +1,6 @@
 package com.ezycollect.payment.service;
 
-import com.ezycollect.payment.exception.RetriesExhaustedException;
+import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.model.Payment;
 import com.ezycollect.payment.model.Webhook;
 import com.ezycollect.payment.repository.WebhookRepository;
@@ -35,6 +35,7 @@ public class WebhookServiceImpl implements WebhookService {
 
     /**
      * Notify all registered webhooks asynchronously with retry mechanism
+     * The payment object will contain encrypted card number - assuming the card number can be decrypted by the receiver
      * @param payment
      * @return ResponseEntity with overall status
      */
@@ -73,8 +74,8 @@ public class WebhookServiceImpl implements WebhookService {
         try {
             webhookRepository.save(webhook);
         } catch (Exception e) {
-            log.error("Failed to register webhook. DB may be down or nonresponsive - {}", e.getMessage());
-            throw new RetriesExhaustedException("Database is down or nonresponsive during webhook registration", e);
+            log.error("Failed to register webhook. DB may be down or non responsive - {}", e.getMessage());
+            throw new DatabaseException("Database is down or non responsive during webhook registration", e);
         }
     }
 

@@ -28,6 +28,8 @@ public class WebhookNotificationServiceImpl implements WebhookNotificationServic
 
     /**
      * Notify a single webhook asynchronously with retry mechanism
+     * Failures are logged and retried based on the retry template configuration.
+     * Upon exhausting retries, the failure is inserted into DB.
      * @param webhook
      * @param payment
      * @return CompletableFuture indicating success or failure
@@ -36,6 +38,7 @@ public class WebhookNotificationServiceImpl implements WebhookNotificationServic
     @Override
     public CompletableFuture<Boolean> notifyWebhookAsync(Webhook webhook, Payment payment) {
         return CompletableFuture.completedFuture(retryTemplate.execute(context -> {
+            //Setting context attributes for logging & audit purposes for handling failures
             context.setAttribute("url", webhook.getUrl());
             context.setAttribute("payload", payment);
 

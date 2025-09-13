@@ -2,6 +2,7 @@ package com.ezycollect.payment.controller;
 
 import com.ezycollect.payment.dto.CreatePaymentRequest;
 import com.ezycollect.payment.dto.CreatePaymentResponse;
+import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.mapper.PaymentMapper;
 import com.ezycollect.payment.model.Payment;
 import com.ezycollect.payment.service.PaymentService;
@@ -38,7 +39,7 @@ public class PaymentController {
             Payment createdPayment = paymentService.createPayment(createPaymentRequest);
             log.info("Payment created with ID: {}", createdPayment.getRequestId());
             return new ResponseEntity<>(paymentMapper.toDto(createdPayment, PAYMENT_CREATED), HttpStatus.CREATED);
-        } catch (Exception e) {
+        } catch (DatabaseException e) {
             log.error("Payment Creation Failed for RequestID: {}", createPaymentRequest.getRequestId());
             return new ResponseEntity<>(paymentMapper.toDto(new Payment(), PAYMENT_FAILED), HttpStatus.BAD_REQUEST);
         }
