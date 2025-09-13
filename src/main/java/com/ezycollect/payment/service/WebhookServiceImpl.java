@@ -1,15 +1,13 @@
 package com.ezycollect.payment.service;
 
-import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.dto.model.Payment;
 import com.ezycollect.payment.dto.model.Webhook;
+import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.repository.WebhookRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,14 +21,11 @@ import java.util.concurrent.ExecutionException;
 public class WebhookServiceImpl implements WebhookService {
 
     private final WebhookRepository webhookRepository;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final WebhookNotificationService webhookNotificationService;
 
-    @Autowired
-    WebhookNotificationServiceImpl webhookNotificationServiceImpl;
-
-    @Autowired
-    public WebhookServiceImpl(WebhookRepository webhookRepository) {
+    public WebhookServiceImpl(WebhookRepository webhookRepository, WebhookNotificationService webhookNotificationService) {
         this.webhookRepository = webhookRepository;
+        this.webhookNotificationService = webhookNotificationService;
     }
 
     /**
@@ -46,7 +41,7 @@ public class WebhookServiceImpl implements WebhookService {
             log.info("Notifying {} registered webhooks", webhooks.size());
             List<CompletableFuture<Boolean>> futures = new ArrayList<>();
             for (Webhook webhook : webhooks) {
-                futures.add(webhookNotificationServiceImpl.notifyWebhookAsync(webhook, payment));
+                futures.add(webhookNotificationService.notifyWebhookAsync(webhook, payment));
             }
             boolean allSuccess = true;
             allSuccess = validateInvocations(futures, allSuccess);

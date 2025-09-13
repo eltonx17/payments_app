@@ -37,7 +37,7 @@ public class WebhookNotificationServiceImpl implements WebhookNotificationServic
     @Async
     @Override
     public CompletableFuture<Boolean> notifyWebhookAsync(Webhook webhook, Payment payment) {
-        return CompletableFuture.completedFuture(retryTemplate.execute(context -> {
+        return CompletableFuture.supplyAsync(() -> retryTemplate.execute(context -> {
             //Setting context attributes for logging & audit purposes for handling failures
             context.setAttribute("url", webhook.getUrl());
             context.setAttribute("payload", payment);

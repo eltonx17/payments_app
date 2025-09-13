@@ -1,0 +1,100 @@
+openapi: 3.0.1
+info:
+  title: Payments API
+  description: API for managing payments and webhooks
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+security:
+  - ApiKeyAuth: []
+paths:
+  /v1/payments/create:
+    post:
+      summary: Create a new payment
+      operationId: createPayment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePaymentRequest'
+      responses:
+        '201':
+          description: Payment created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatePaymentResponse'
+        '401':
+          description: Unauthorized
+  /v1/webhooks/create:
+    post:
+      summary: Register a new webhook
+      operationId: registerWebhook
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterWebhookRequest'
+      responses:
+        '200':
+          description: Webhook registered successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterWebhookResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterWebhookResponse'
+        '401':
+          description: Unauthorized
+components:
+  schemas:
+    CreatePaymentRequest:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        zipCode:
+          type: string
+        cardNumber:
+          type: string
+    CreatePaymentResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        status:
+          type: string
+    RegisterWebhookRequest:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+    RegisterWebhookResponse:
+      type: object
+      properties:
+        status:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
