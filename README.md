@@ -43,12 +43,17 @@ Frontend:
 8. The application also used MapStruct for entity-DTO mapping. **IDE would need to be configured to handle MapStruct annotations.**
 9. The application does not include pagination or filtering for listing payments or webhooks. These features can be added as needed.
 10. The application does not include input validation beyond basic checks. More comprehensive validation should be implemented as needed.
+11. Front-end was optional, but has been included for completeness. It is a simple Angular app that allows users to create payments and register webhooks - does not handle complex validations etc.
 
 ## High Level Architecture
 - The system consists of RESTful APIs for creating payments and registering webhooks.
 - Payments are stored in a PostgreSQL database. 
   - 3 tables are used - payments, webhooks and failed_webhooks (audit table).
 - Webhooks are invoked asynchronously using CompletableFuture with retries on failure using Spring Retry.
+  - For further scalability, the webhook invocation could be offloaded to a message queue (like RabbitMQ/Kafka) to decouple it from the payment creation process.
+- Additionally, components for creation of payments, registration of webhooks, and invocation of webhooks are separated into different service classes to adhere to the Single Responsibility Principle.
+- Also, circuit breaker pattern can be implemented using Resilience4j to prevent system overload in case of persistent webhook failures.
+
 ![Architecture Diagram](docs/flow_diagram.jpg)
 
 ## Payloads
