@@ -94,7 +94,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterWebhookResponseFailure'
+                $ref: '#/components/schemas/DbFailure'
 components:
   schemas:
     CreatePaymentRequest:
@@ -228,13 +228,13 @@ components:
       properties:
         status:
           type: string
-          description: The status of the webhook registration.
-          enum: [REGISTER_WEBHOOK_FAILURE]
-          example: 'REGISTER_WEBHOOK_FAILURE'
+          description: Status of
+          enum: [REGISTER_WEBHOOK_FAILURE, PAYMENT_FAILED]
+          example: 'REGISTER_WEBHOOK_FAILURE / PAYMENT_FAILED'
         message:
           type: string
           description: Reason for failure.
-          example: 'Database is down or non responsive during webhook registration'
+          example: 'Database is down or non responsive'
     UnauthorizedErrorResponse:
       type: object
       required:
