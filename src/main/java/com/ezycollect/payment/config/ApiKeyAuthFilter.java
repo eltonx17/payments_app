@@ -30,21 +30,25 @@ public class ApiKeyAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        log.info("Authenticating Request");
-        String requestApiKey = request.getHeader(API_KEY_HEADER);
-        if (requestApiKey != null && apiKey.equals(requestApiKey.trim())) {
-            log.info("Authentication Successful");
-            // Set authentication in context
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                "apikey-user", null, Collections.emptyList()
-            );
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            filterChain.doFilter(request, response);
+        if (request.getServletPath().startsWith("/v1/")) {
+            log.info("Authenticating Request");
+            String requestApiKey = request.getHeader(API_KEY_HEADER);
+            if (requestApiKey != null && apiKey.equals(requestApiKey.trim())) {
+                log.info("Authentication Successful");
+                // Set authentication in context
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+                    "apikey-user", null, Collections.emptyList()
+                );
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                filterChain.doFilter(request, response);
+            } else {
+                log.info("Unauthorized Request - Invalid API Key");
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setContentType("application/json");
+                response.getWriter().write("{\"error\":\"Unauthorized: Invalid API Key\"}");
+            }
         } else {
-            log.info("Unauthorized Request - Invalid API Key");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\":\"Unauthorized: Invalid API Key\"}");
+            filterChain.doFilter(request, response);
         }
     }
 }
