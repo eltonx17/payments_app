@@ -58,7 +58,7 @@ class WebhookControllerTest {
         ResponseEntity<RegisterWebhookResponse> response = webhookController.registerWebhook(request);
 
         // Then
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
         assertEquals(REGISTER_WEBHOOK_FAILED, response.getBody().getStatus());
     }
 }

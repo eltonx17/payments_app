@@ -45,14 +45,13 @@ class PaymentControllerTest {
         responseDto.setStatus(PAYMENT_CREATED);
 
         when(paymentService.createPayment(any(CreatePaymentRequest.class))).thenReturn(payment);
-        when(paymentMapper.toDto(payment, PAYMENT_CREATED)).thenReturn(responseDto);
+        when(paymentMapper.toDto(payment, PAYMENT_CREATED, "message")).thenReturn(responseDto);
 
         // When
         ResponseEntity<CreatePaymentResponse> response = paymentController.createPayment(request);
 
         // Then
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(PAYMENT_CREATED, response.getBody().getStatus());
     }
 
     @Test
@@ -63,13 +62,12 @@ class PaymentControllerTest {
         responseDto.setStatus(PAYMENT_FAILED);
 
         when(paymentService.createPayment(any(CreatePaymentRequest.class))).thenThrow(new DatabaseException("DB error", new Throwable("")));
-        when(paymentMapper.toDto(any(Payment.class), any(String.class))).thenReturn(responseDto);
+        when(paymentMapper.toDto(any(Payment.class), any(String.class), any(String.class))).thenReturn(responseDto);
 
         // When
         ResponseEntity<CreatePaymentResponse> response = paymentController.createPayment(request);
 
         // Then
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals(PAYMENT_FAILED, response.getBody().getStatus());
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }
 }

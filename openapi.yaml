@@ -4,12 +4,27 @@ info:
   description: API for managing payments and webhooks
   version: 1.0.0
 servers:
-  - url: http://localhost:8080
+  - url: '{protocol}://{host}:{port}'
+    variables:
+      protocol:
+        default: http
+        enum: [http, https]
+      host:
+        default: localhost
+      port:
+        default: '8080'
 security:
   - ApiKeyAuth: []
+tags:
+  - name: Payments
+    description: Operations related to payments
+  - name: Webhooks
+    description: Operations related to webhooks
 paths:
   /v1/payments/create:
     post:
+      tags:
+        - Payments
       summary: Create a new payment
       operationId: createPayment
       requestBody:
@@ -25,16 +40,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreatePaymentResponse'
-        '400':
+        '403':
           description: Invalid request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreatePaymentResponse'
+                $ref: '#/components/schemas/CreatePaymentResponseFailure'
+        '400':
+          description: "Bad Request - Validation failed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidationErrorResponse"
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DbFailure'
   /v1/webhooks/create:
     post:
+      tags:
+        - Webhooks
       summary: Register a new webhook
       operationId: registerWebhook
       requestBody:
@@ -44,8 +77,8 @@ paths:
             schema:
               $ref: '#/components/schemas/RegisterWebhookRequest'
       responses:
-        '200':
-          description: Webhook registered successfully
+        '201':
+          description: Webhook created successfully
           content:
             application/json:
               schema:
@@ -55,44 +88,168 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterWebhookResponse'
+                $ref: '#/components/schemas/RegisterWebhookResponseFailure'
         '401':
           description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedErrorResponse'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisterWebhookResponseFailure'
 components:
   schemas:
     CreatePaymentRequest:
       type: object
+      required:
+        - requestId
+        - firstName
+        - lastName
+        - zipCode
+        - cardNumber
       properties:
         requestId:
           type: string
           format: uuid
+          description: A unique identifier for the request, provided by the client.
+          example: 'c7a4f3a0-8e1e-4b9f-9e6d-2e6d2e6d2e6d'
         firstName:
           type: string
+          description: The cardholder's first name.
+          example: 'John'
         lastName:
           type: string
+          description: The cardholder's last name.
+          example: 'Doe'
         zipCode:
           type: string
+          description: The billing address zip or postal code.
+          example: '90210'
         cardNumber:
           type: string
+          description: The number of the credit card.
+          example: '4242424242424242'
     CreatePaymentResponse:
       type: object
+      required:
+        - requestId
+        - status
       properties:
         requestId:
           type: string
           format: uuid
+          description: The unique request ID provided by the client.
+          example: 'c7a4f3a0-8e1e-4b9f-9e6d-2e6d2e6d2e6d'
         status:
           type: string
+          description: The status of the payment creation request.
+          enum: [PAYMENT_CREATED]
+          example: 'PAYMENT_CREATED'
+    CreatePaymentResponseFailure:
+      type: object
+      required:
+        - requestId
+        - status
+        - message
+      properties:
+        requestId:
+          type: string
+          format: uuid
+          description: The unique request ID provided by the client.
+          example: 'c7a4f3a0-8e1e-4b9f-9e6d-2e6d2e6d2e6d'
+        status:
+          type: string
+          description: The status of the payment creation request.
+          example: 'PAYMENT_FAILED'
+        message:
+          type: string
+          description: The message describing failure reason.
+          example: 'Database is down or nonresponsive'
+    ValidationErrorResponse:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2025-09-14T02:52:44.162+00:00"
+        status:
+          type: integer
+          example: 400
+        error:
+          type: string
+          example: "Bad Request"
+        message:
+          type: string
+          example: "Validation failed for object='createPaymentRequest'. Error count: 1"
+        trace:
+          type: string
+          example: "org.springframework.web.bind.MethodArgumentNotValidException: Validation failed..."
+        errors:
+          type: string
+          example: "[]"
+        path:
+          type: string
+          example: "/v1/payments/create"
     RegisterWebhookRequest:
       type: object
+      required:
+        - url
       properties:
         url:
           type: string
           format: uri
+          description: The URL to which webhook notifications will be sent.
+          example: 'https://my-service.com/webhook-handler'
     RegisterWebhookResponse:
       type: object
+      required:
+        - status
       properties:
         status:
           type: string
+          description: The status of the webhook registration.
+          example: 'REGISTER_WEBHOOK_SUCCESS'
+    RegisterWebhookResponseFailure:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          description: The status of the webhook registration.
+          enum: [REGISTER_WEBHOOK_FAILURE]
+          example: 'REGISTER_WEBHOOK_FAILURE'
+        message:
+          type: string
+          description: Reason for failure.
+          example: 'Invalid URL format'
+    DbFailure:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          description: The status of the webhook registration.
+          enum: [REGISTER_WEBHOOK_FAILURE]
+          example: 'REGISTER_WEBHOOK_FAILURE'
+        message:
+          type: string
+          description: Reason for failure.
+          example: 'Database is down or non responsive during webhook registration'
+    UnauthorizedErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: Description of failure.
+          example: 'Unauthorized: Invalid API Key'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

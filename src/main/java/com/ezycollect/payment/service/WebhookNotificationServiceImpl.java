@@ -44,8 +44,8 @@ public class WebhookNotificationServiceImpl implements WebhookNotificationServic
 
             log.info("Notifying webhook at URL: {}", webhook.getUrl());
             ResponseEntity<String> response = restTemplate.postForEntity(webhook.getUrl(), payment, String.class);
-            log.info("Webhook response status: {}", response.getStatusCode());
-            log.info("Webhook response body: {}", response.getBody());
+            log.info("Webhook {} response status: {}", webhook.getUrl(), response.getStatusCode());
+            log.info("Webhook {} response body: {}", webhook.getUrl(), response.getBody());
             return response.getStatusCode().is2xxSuccessful();
         }));
     }

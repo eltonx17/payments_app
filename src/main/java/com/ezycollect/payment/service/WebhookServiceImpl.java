@@ -25,8 +25,6 @@ public class WebhookServiceImpl implements WebhookService {
     private final WebhookRepository webhookRepository;
     private final WebhookNotificationService webhookNotificationService;
 
-    private static UrlValidationUtils urlValidationUtils;
-
     public WebhookServiceImpl(WebhookRepository webhookRepository, WebhookNotificationService webhookNotificationService) {
         this.webhookRepository = webhookRepository;
         this.webhookNotificationService = webhookNotificationService;
@@ -68,7 +66,8 @@ public class WebhookServiceImpl implements WebhookService {
      */
     @Override
     public void registerWebhook(String url) {
-        if(!url.isEmpty() && !urlValidationUtils.validateUrl(url)) {
+        if(url.isEmpty()) throw new IllegalArgumentException("Empty URL not allowed");
+        if(!UrlValidationUtils.validateUrl(url)) {
             throw new IllegalArgumentException("Invalid URL format");
         }
         Webhook webhook = new Webhook();

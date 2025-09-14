@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_CREATED;
 import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_FAILED;
 
@@ -34,15 +36,18 @@ public class PaymentController {
      * @return ResponseEntity containing the payment creation response and HTTP status
      */
     @PostMapping("/create")
-    public ResponseEntity<CreatePaymentResponse> createPayment(@RequestBody CreatePaymentRequest createPaymentRequest) {
+    public ResponseEntity<CreatePaymentResponse> createPayment(@Valid @RequestBody CreatePaymentRequest createPaymentRequest) {
         try {
             log.info("Received new payment creation request - RequestID: {}", createPaymentRequest.getRequestId());
             Payment createdPayment = paymentService.createPayment(createPaymentRequest);
             log.info("Payment created with ID: {}", createdPayment.getRequestId());
-            return new ResponseEntity<>(paymentMapper.toDto(createdPayment, PAYMENT_CREATED), HttpStatus.CREATED);
+            return new ResponseEntity<>(paymentMapper.toDto(createdPayment, PAYMENT_CREATED, null), HttpStatus.CREATED);
         } catch (DatabaseException e) {
             log.error("Payment Creation Failed for RequestID: {}", createPaymentRequest.getRequestId());
-            return new ResponseEntity<>(paymentMapper.toDto(new Payment(), PAYMENT_FAILED), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(paymentMapper.toDto(new Payment(), PAYMENT_FAILED, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid arguments for payment creation for RequestID: {}", createPaymentRequest.getRequestId());
+            return new ResponseEntity<>(paymentMapper.toDto(new Payment(), PAYMENT_FAILED, e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 }

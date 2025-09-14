@@ -5,6 +5,7 @@ import com.ezycollect.payment.dto.RegisterWebhookResponse;
 import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.service.WebhookService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import static com.ezycollect.payment.config.PaymentConstants.REGISTER_WEBHOOK_SU
 @RequestMapping("/v1/webhooks")
 @AllArgsConstructor
 @CrossOrigin
+@Slf4j
 public class WebhookController {
 
     @Autowired
@@ -36,8 +38,10 @@ public class WebhookController {
         try {
             webhookService.registerWebhook(registerWebhookRequest.getUrl());
             return ResponseEntity.ok(new RegisterWebhookResponse(REGISTER_WEBHOOK_SUCCESS));
-        } catch (DatabaseException | IllegalArgumentException e) {
-            return new ResponseEntity<>(new RegisterWebhookResponse(REGISTER_WEBHOOK_FAILED), HttpStatus.BAD_REQUEST);
+        } catch (DatabaseException e) {
+            return new ResponseEntity<>(new RegisterWebhookResponse(REGISTER_WEBHOOK_FAILED, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(new RegisterWebhookResponse(REGISTER_WEBHOOK_FAILED, e.getMessage()), HttpStatus.BAD_REQUEST);
         }
     }
 }

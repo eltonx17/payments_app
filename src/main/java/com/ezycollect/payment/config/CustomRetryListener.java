@@ -7,7 +7,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Role;
 import org.springframework.retry.RetryCallback;
 import org.springframework.retry.RetryContext;
 import org.springframework.retry.listener.RetryListenerSupport;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
+@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 public class CustomRetryListener extends RetryListenerSupport {
 
     private final WebhookAuditRepository webhookAuditRepository;

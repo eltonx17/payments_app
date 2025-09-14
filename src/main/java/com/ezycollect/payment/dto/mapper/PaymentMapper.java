@@ -17,5 +17,6 @@ public interface PaymentMapper {
     Payment toModel(CreatePaymentRequest createPaymentRequest);
 
     @Mapping(target = "status", source = "status")
-    CreatePaymentResponse toDto(Payment payment, String status);
+    @Mapping(target = "message", source = "message")
+    CreatePaymentResponse toDto(Payment payment, String status, String message);
 }
