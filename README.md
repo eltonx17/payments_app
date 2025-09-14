@@ -20,6 +20,10 @@ The application is also hosted on Koyeb PaaS platform and can be accessed at: ht
 - Run tests using `mvn test`
 - Attached simple manual testing document in docs/ folder for reference.
 
+### Payloads
+- OpenAPI/Swagger documentation is placed in the root of the project (openapi.yaml).
+- Can also be accessed directly in Swagger UI at http://localhost:8080/swagger-ui/index.html (local) OR https://payment-eg.koyeb.app/swagger-ui/index.html for detailed API documentation
+
 ## Assumptions/Notes
 1. Payment flow should be successful irrespective of webhook invocation outcome
 2. Card number is sent encrypted to the webhook, can be decrypted by the receiver
@@ -53,12 +57,7 @@ The application is also hosted on Koyeb PaaS platform and can be accessed at: ht
 - User Interface can be enhanced to provide better user experience and real-time updates on webhook invocation status.
 - UI can be deployed separately using a static site hosting service for better performance and scalability.
 
-## Payloads
-- OpenAPI/Swagger documentation is placed in the root of the project (openapi.yaml).
-- Can also be accessed directly in Swagger UI at `http://localhost:8080/swagger-ui/index.html` (local) OR `https://payment-eg.koyeb.app/swagger-ui/index.html` for detailed API documentation
-
 ## API Endpoints
-
 - `POST /v1/payments/create`: Create a new payment
 - `POST /v1/webhooks/create`: Register a new webhook
 
