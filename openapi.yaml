@@ -41,7 +41,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/CreatePaymentResponse'
         '400':
-          description: Bad Request - Validation failed
+          description: Bad Request - Field Validation failed
           content:
             application/json:
               schema:
@@ -166,28 +166,21 @@ components:
     ValidationErrorResponse:
       type: object
       properties:
-        timestamp:
+        requestId:
           type: string
-          format: date-time
-          example: "2025-09-14T02:52:44.162+00:00"
-        status:
-          type: integer
-          example: 400
-        error:
+          example: "must not be blank"
+        firstName:
           type: string
-          example: "Bad Request"
-        message:
+          example: "must not be blank"
+        lastName:
           type: string
-          example: "Validation failed for object='createPaymentRequest'. Error count: 1"
-        trace:
+          example: "must not be blank"
+        zipCode:
           type: string
-          example: "org.springframework.web.bind.MethodArgumentNotValidException: Validation failed..."
-        errors:
+          example: "must not be blank"
+        cardNumber:
           type: string
-          example: "[]"
-        path:
-          type: string
-          example: "/v1/payments/create"
+          example: "must not be blank"
     RegisterWebhookRequest:
       type: object
       required:

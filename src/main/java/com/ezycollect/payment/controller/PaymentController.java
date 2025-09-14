@@ -32,6 +32,8 @@ public class PaymentController {
 
     /**
      * Endpoint to create a new payment
+     * Validation is performed on the request body using @Valid - invalid requests will result in 400 Bad Request
+     * For more granular validation error details, a custom exception handler can be implemented
      * @param createPaymentRequest The payment creation request payload
      * @return ResponseEntity containing the payment creation response and HTTP status
      */
