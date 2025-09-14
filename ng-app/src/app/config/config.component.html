@@ -1,0 +1,20 @@
+<div class="config-container">
+  <h3>API Configuration</h3>
+  <div class="form-group">
+    <label for="apiHost">API Host URL</label>
+    <input 
+      type="url" 
+      id="apiHost" 
+      [(ngModel)]="apiHost" 
+      name="apiHost"
+      placeholder="https://api.example.com"
+      class="api-input">
+  </div>
+  <button (click)="saveConfig()" class="save-button">Save Configuration</button>
+  <div *ngIf="message" 
+       class="message" 
+       [class.success]="message.includes('successfully')"
+       [class.error]="message.includes('Please')">
+    {{ message }}
+  </div>
+</div>
