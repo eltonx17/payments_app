@@ -6,11 +6,10 @@ App for managing payments and webhooks
 ## Installation and Running
 
 1. Clone the repository
-2. Update `application.properties` with your supabase session pooler connection string
+2. Update `application.properties` with your Supabase Session Pooler connection string
 3. Build the project using `mvn clean install`
-4. Run `mvn spring-boot:run
+4. Run `mvn spring-boot:run`
 5. The application will be available at `http://localhost:8080`
-6. Access Swagger UI at `http://localhost:8080/swagger-ui/index.html` for API documentation and testing.
 
 The application is also hosted on Koyeb PaaS platform and can be accessed at: https://payment-eg.koyeb.app
 - Ensure to update the configuration URL on the Angular front-end to point to this hosted URL (https://payment-eg.koyeb.app) instead of default localhost.
@@ -59,12 +58,18 @@ Frontend:
 - Webhooks are invoked asynchronously using CompletableFuture with retries on failure using Spring Retry. This ensures that the payment creation process is not blocked by slow or failing webhook endpoints.
   - For further scalability, the webhook invocation could be offloaded to a message queue (like RabbitMQ/Kafka) to decouple it from the payment creation process.
 - Additionally, components for creation of payments, registration of webhooks, and invocation of webhooks are separated into different service classes to adhere to the Single Responsibility Principle.
-- Also, circuit breaker pattern can be implemented using Resilience4j to prevent system overload in case of persistent webhook failures.
 
 ![Architecture Diagram](docs/flow_diagram.jpg)
 
+### Potential Improvements
+- The payment creation, webhook registration, and webhook invocation services can be further broken down into smaller microservices for better scalability and maintainability.
+- Use a message broker (like RabbitMQ/Kafka) for webhook invocation to improve reliability and scalability.
+- Also, circuit breaker pattern can be implemented using Resilience4j to prevent system overload in case of persistent webhook failures.
+
 ## Payloads
 - OpenAPI/Swagger documentation is placed in the root of the project (openapi.yaml).
+- Access Spring Doc generated Swagger UI at `http://localhost:8080/swagger-ui/index.html` for API documentation and testing.
+
 ### Create Payment
 ```POST /v1/payments/create
 Content-Type: application/json
