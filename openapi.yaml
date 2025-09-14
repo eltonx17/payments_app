@@ -125,7 +125,7 @@ components:
           example: '90210'
         cardNumber:
           type: string
-          description: The number of the credit card.
+          description: The number of the credit card - should be Luhn Valid.
           example: '4242424242424242'
     CreatePaymentResponse:
       type: object
@@ -159,28 +159,16 @@ components:
           type: string
           description: The status of the payment creation request.
           example: 'PAYMENT_FAILED'
-        message:
+        error:
           type: string
           description: The message describing failure reason.
           example: 'Database is down or nonresponsive'
     ValidationErrorResponse:
       type: object
       properties:
-        requestId:
+        error:
           type: string
-          example: "must not be blank"
-        firstName:
-          type: string
-          example: "must not be blank"
-        lastName:
-          type: string
-          example: "must not be blank"
-        zipCode:
-          type: string
-          example: "must not be blank"
-        cardNumber:
-          type: string
-          example: "must not be blank"
+          example: "cardNumber: invalid credit card number"
     RegisterWebhookRequest:
       type: object
       required:
@@ -224,7 +212,7 @@ components:
           description: Status of
           enum: [REGISTER_WEBHOOK_FAILURE, PAYMENT_FAILED]
           example: 'REGISTER_WEBHOOK_FAILURE / PAYMENT_FAILED'
-        message:
+        error:
           type: string
           description: Reason for failure.
           example: 'Database is down or non responsive'
