@@ -30,4 +30,4 @@ jobs:
           environment_name: Payments-env
           region: us-east-1
           version_label: v-${{ github.run_number }}
-          deployment_package: target/myapp-0.0.1-SNAPSHOT.jar
+          deployment_package: target/payment-0.0.1-SNAPSHOT.jar
