@@ -5,6 +5,7 @@ import com.ezycollect.payment.dto.CreatePaymentResponse;
 import com.ezycollect.payment.dto.mapper.PaymentMapper;
 import com.ezycollect.payment.dto.model.Payment;
 import com.ezycollect.payment.exception.DatabaseException;
+import com.ezycollect.payment.exception.PaymentFailedException;
 import com.ezycollect.payment.service.PaymentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_CREATED;
 import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_FAILED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -55,7 +57,7 @@ class PaymentControllerTest {
     }
 
     @Test
-    void createPayment_failure() throws DatabaseException {
+    void createPayment_failure() {
         // Given
         CreatePaymentRequest request = new CreatePaymentRequest();
         CreatePaymentResponse responseDto = new CreatePaymentResponse();
@@ -64,10 +66,7 @@ class PaymentControllerTest {
         when(paymentService.createPayment(any(CreatePaymentRequest.class))).thenThrow(new DatabaseException("DB error", new Throwable("")));
         when(paymentMapper.toDto(any(Payment.class), any(String.class), any(String.class))).thenReturn(responseDto);
 
-        // When
-        ResponseEntity<CreatePaymentResponse> response = paymentController.createPayment(request);
-
-        // Then
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        // When, Then
+        assertThrows(PaymentFailedException.class, () -> paymentController.createPayment(request));
     }
 }

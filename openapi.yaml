@@ -169,6 +169,10 @@ components:
         error:
           type: string
           example: "cardNumber: invalid credit card number"
+        status:
+          type: string
+          description: The status of the payment creation request.
+          example: 'VALIDATION_ERROR'
     RegisterWebhookRequest:
       type: object
       required:
@@ -198,7 +202,7 @@ components:
           description: The status of the webhook registration.
           enum: [REGISTER_WEBHOOK_FAILURE]
           example: 'REGISTER_WEBHOOK_FAILURE'
-        message:
+        error:
           type: string
           description: Reason for failure.
           example: 'Invalid URL format'

@@ -3,6 +3,7 @@ package com.ezycollect.payment.controller;
 import com.ezycollect.payment.dto.RegisterWebhookRequest;
 import com.ezycollect.payment.dto.RegisterWebhookResponse;
 import com.ezycollect.payment.exception.DatabaseException;
+import com.ezycollect.payment.exception.WebhookRegistrationFailedException;
 import com.ezycollect.payment.service.WebhookService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import static com.ezycollect.payment.config.PaymentConstants.REGISTER_WEBHOOK_FAILED;
 import static com.ezycollect.payment.config.PaymentConstants.REGISTER_WEBHOOK_SUCCESS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.anyString;
@@ -54,11 +56,8 @@ class WebhookControllerTest {
         request.setUrl("http://test.com/webhook");
         doThrow(new DatabaseException("DB error", new Throwable(""))).when(webhookService).registerWebhook(anyString());
 
-        // When
-        ResponseEntity<RegisterWebhookResponse> response = webhookController.registerWebhook(request);
+        // When, Then
+        assertThrows(WebhookRegistrationFailedException.class, () -> webhookController.registerWebhook(request));
 
-        // Then
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals(REGISTER_WEBHOOK_FAILED, response.getBody().getStatus());
-    }
+        }
 }
