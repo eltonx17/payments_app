@@ -4,7 +4,9 @@
 App for managing payments and webhooks
 
 ## Installation and Running
-
+### Prerequisites
+- Java 21, Spring 3.5.5, PostgreSQL (Supabase)
+- An IDE like IntelliJ/Eclipse (with Lombok and MapStruct plugins installed)
 1. Clone the repository
 2. Update `application.properties` with your Supabase Session Pooler connection string
 3. Build the project using `mvn clean install`
@@ -55,6 +57,7 @@ Frontend:
 - The system consists of RESTful APIs for creating payments and registering webhooks.
 - Payments are stored in a PostgreSQL database. 
   - 3 tables are used - payments, webhooks and failed_webhooks (audit table).
+  - Card Number is stored encrypted in the payments table using AES 256 encryption.
 - Webhooks are invoked asynchronously using CompletableFuture with retries on failure using Spring Retry. This ensures that the payment creation process is not blocked by slow or failing webhook endpoints.
   - For further scalability, the webhook invocation could be offloaded to a message queue (like RabbitMQ/Kafka) to decouple it from the payment creation process.
 - Additionally, components for creation of payments, registration of webhooks, and invocation of webhooks are separated into different service classes to adhere to the Single Responsibility Principle.
@@ -70,7 +73,7 @@ Frontend:
 
 ## Payloads
 - OpenAPI/Swagger documentation is placed in the root of the project (openapi.yaml).
-- Access Spring Doc generated Swagger UI at `http://localhost:8080/swagger-ui/index.html` for API documentation and testing.
+- Access auto-generated Spring Doc Swagger UI at `http://localhost:8080/swagger-ui/index.html` for API documentation.
 
 ### Create Payment
 ```POST /v1/payments/create
