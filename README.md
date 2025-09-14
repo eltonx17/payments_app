@@ -65,6 +65,8 @@ Frontend:
 - The payment creation, webhook registration, and webhook invocation services can be further broken down into smaller microservices for better scalability and maintainability.
 - Use a message broker (like RabbitMQ/Kafka) for webhook invocation to improve reliability and scalability.
 - Also, circuit breaker pattern can be implemented using Resilience4j to prevent system overload in case of persistent webhook failures.
+- User Interface can be enhanced to provide better user experience and real-time updates on webhook invocation status.
+- UI can be deployed separately using a static site hosting service for better performance and scalability.
 
 ## Payloads
 - OpenAPI/Swagger documentation is placed in the root of the project (openapi.yaml).
