@@ -20,24 +20,6 @@ The application is also hosted on Koyeb PaaS platform and can be accessed at: ht
 - Run tests using `mvn test`
 - Attached simple manual testing document in docs/ folder for reference.
 
-## API Endpoints
-
-- `POST /v1/payments/create`: Create a new payment
-- `POST /v1/webhooks/create`: Register a new webhook
-
-## Technologies Used
-Backend:
-- Language: Java 21, Spring Boot 3.5.5
-- DB: PostgreSQL - Supabase
-- ORM: Hibernate
-- Logging: slf4j
-- Entity Mapping: MapStruct
-- API Auth: Simple API Key Authentication
-- Testing: JUnit/Mockito
-
-Frontend:
-- Framework: Angular 19
-
 ## Assumptions/Notes
 1. Payment flow should be successful irrespective of webhook invocation outcome
 2. Card number is sent encrypted to the webhook, can be decrypted by the receiver
@@ -74,6 +56,11 @@ Frontend:
 ## Payloads
 - OpenAPI/Swagger documentation is placed in the root of the project (openapi.yaml).
 - Access auto-generated Spring Doc Swagger UI at `http://localhost:8080/swagger-ui/index.html` for API documentation.
+
+## API Endpoints
+
+- `POST /v1/payments/create`: Create a new payment
+- `POST /v1/webhooks/create`: Register a new webhook
 
 ### Create Payment
 ```POST /v1/payments/create
@@ -112,6 +99,20 @@ X-API-KEY: your_api_key_here
   "status": "REGISTER_WEBHOOK_SUCCESS"
 }
 ```
+
+
+## Technologies Used
+Backend:
+- Language: Java 21, Spring Boot 3.5.5
+- DB: PostgreSQL - Supabase
+- ORM: Hibernate
+- Logging: slf4j
+- Entity Mapping: MapStruct
+- API Auth: Simple API Key Authentication
+- Testing: JUnit/Mockito
+
+Frontend:
+- Framework: Angular 19
 
 ## Dependencies
 - Spring Boot
