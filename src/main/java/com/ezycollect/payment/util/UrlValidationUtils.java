@@ -22,14 +22,8 @@ public class UrlValidationUtils {
             return false;
         }
 
-        String urlToValidate = url;
-        // Prepend "https://" to URLs that start with "www." but don't have a scheme.
-        if (url.toLowerCase().startsWith("www.") && !url.contains("://")) {
-            urlToValidate = "https://" + url;
-        }
-
         UrlValidator urlValidator = new UrlValidator(new String[]{"http", "https", "ftp"});
-        if (!urlValidator.isValid(urlToValidate)) {
+        if (!urlValidator.isValid(url)) {
             log.error("Invalid URL received: {}", url);
             return false;
         }

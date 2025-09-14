@@ -67,11 +67,17 @@ public class WebhookServiceImpl implements WebhookService {
     @Override
     public void registerWebhook(String url) {
         if(url.isEmpty()) throw new IllegalArgumentException("Empty URL not allowed");
-        if(!UrlValidationUtils.validateUrl(url)) {
+
+        String urlToValidate = url;
+        // Prepend "https://" to URLs that start with "www." but don't have a scheme.
+        if (url.toLowerCase().startsWith("www.") && !url.contains("://")) {
+            urlToValidate = "https://" + url;
+        }
+        if(!UrlValidationUtils.validateUrl(urlToValidate)) {
             throw new IllegalArgumentException("Invalid URL format");
         }
         Webhook webhook = new Webhook();
-        webhook.setUrl(url);
+        webhook.setUrl(urlToValidate);
         try {
             webhookRepository.save(webhook);
         } catch (Exception e) {
