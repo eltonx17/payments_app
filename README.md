@@ -50,6 +50,9 @@ The application is also hosted on Koyeb PaaS platform and can be accessed at: ht
 
 ![Architecture Diagram](docs/flow_diagram.jpg)
 
+### Database Schema
+![Database Schema](docs/db_schema.png)
+
 ### Potential Improvements
 - The payment creation, webhook registration, and webhook invocation services can be further broken down into smaller microservices for better scalability and maintainability.
 - Use a message broker (like RabbitMQ/Kafka) for webhook invocation to improve reliability and scalability.
