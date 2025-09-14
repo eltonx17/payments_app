@@ -40,18 +40,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CreatePaymentResponse'
-        '403':
-          description: Invalid request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreatePaymentResponseFailure'
         '400':
-          description: "Bad Request - Validation failed"
+          description: Bad Request - Validation failed
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ValidationErrorResponse"
+                $ref: '#/components/schemas/ValidationErrorResponse'
         '401':
           description: Unauthorized
           content:
@@ -59,7 +53,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/UnauthorizedErrorResponse'
         '500':
-          description: Internal Server Error
+          description: Internal Server Error / DB Failure
           content:
             application/json:
               schema:
