@@ -8,7 +8,12 @@ App for managing payments and webhooks
 1. Clone the repository
 2. Update `application.properties` with your supabase session pooler connection string
 3. Build the project using `mvn clean install`
-4. Run `mvn spring-boot:run`
+4. Run `mvn spring-boot:run
+5. The application will be available at `http://localhost:8080`
+6. Access Swagger UI at `http://localhost:8080/swagger-ui/index.html` for API documentation and testing.
+
+The application is also hosted on Koyeb PaaS platform and can be accessed at: https://payment-eg.koyeb.app
+- Ensure to update the configuration URL on the Angular front-end to point to this hosted URL (https://payment-eg.koyeb.app) instead of default localhost.
 
 ## Testing
 - Run tests using `mvn test`
@@ -44,12 +49,14 @@ Frontend:
 9. The application does not include pagination or filtering for listing payments or webhooks. These features can be added as needed.
 10. The application does not include input validation beyond basic checks. More comprehensive validation should be implemented as needed.
 11. Front-end was optional, but has been included for completeness. It is a simple Angular app that allows users to create payments and register webhooks - does not handle complex validations etc.
+12. Async Webhook Execution is not displayed on the Angular UI, but can be monitored via logs or DB entries. For a production system, this could be handled using SSE or WebSocket to provide real-time updates to the user.
+13. CORS is enabled for all origins for simplicity. In a production system, this should be restricted to trusted domains.
 
 ## High Level Architecture
 - The system consists of RESTful APIs for creating payments and registering webhooks.
 - Payments are stored in a PostgreSQL database. 
   - 3 tables are used - payments, webhooks and failed_webhooks (audit table).
-- Webhooks are invoked asynchronously using CompletableFuture with retries on failure using Spring Retry.
+- Webhooks are invoked asynchronously using CompletableFuture with retries on failure using Spring Retry. This ensures that the payment creation process is not blocked by slow or failing webhook endpoints.
   - For further scalability, the webhook invocation could be offloaded to a message queue (like RabbitMQ/Kafka) to decouple it from the payment creation process.
 - Additionally, components for creation of payments, registration of webhooks, and invocation of webhooks are separated into different service classes to adhere to the Single Responsibility Principle.
 - Also, circuit breaker pattern can be implemented using Resilience4j to prevent system overload in case of persistent webhook failures.
