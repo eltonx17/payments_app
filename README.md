@@ -75,7 +75,7 @@ X-API-KEY: your_api_key_here
   "firstName": "Jane Smith",
   "lastName": "Smith",
   "zipCode": "11",
-  "cardNumber": "4242-4242-4242-4242"
+  "cardNumber": "4242424242424242" // Must be Luhn valid
 }
 ```
 ### Response
