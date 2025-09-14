@@ -6,15 +6,10 @@ import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.repository.WebhookRepository;
 import com.ezycollect.payment.util.UrlValidationUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -34,10 +29,9 @@ public class WebhookServiceImpl implements WebhookService {
      * Notify all registered webhooks asynchronously with retry mechanism
      * The payment object will contain encrypted card number - assuming the card number can be decrypted by the receiver
      * @param payment
-     * @return ResponseEntity with overall status
      */
     @Override
-    public ResponseEntity<Object> notifyWebhooks(Payment payment) {
+    public void notifyWebhooks(Payment payment) {
         List<Webhook> webhooks = webhookRepository.findAll();
         if (!webhooks.isEmpty()) {
             log.info("Notifying {} registered webhooks", webhooks.size());
@@ -47,14 +41,13 @@ public class WebhookServiceImpl implements WebhookService {
             }
             boolean allSuccess = true;
             allSuccess = validateInvocations(futures, allSuccess);
-            Map<String, String> response = new HashMap<>();
-            response.put("status", allSuccess ? "OK" : "Partial Failure");
-            return new ResponseEntity<>(response, allSuccess ? HttpStatus.OK : HttpStatus.INTERNAL_SERVER_ERROR);
+            if(allSuccess) {
+                log.info("All webhooks notified successfully");
+            } else {
+                log.warn("Some webhooks failed to be notified");
+            }
         } else {
             log.info("No registered webhooks to invoke");
-            Map<String, String> response = new HashMap<>();
-            response.put("status", "No webhooks registered");
-            return new ResponseEntity<>(response, HttpStatus.OK);
         }
     }
 
