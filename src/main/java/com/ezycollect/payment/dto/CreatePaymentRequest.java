@@ -2,6 +2,7 @@ package com.ezycollect.payment.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import org.hibernate.validator.constraints.CreditCardNumber;
 
 @Data
 public class CreatePaymentRequest {
@@ -15,5 +16,6 @@ public class CreatePaymentRequest {
     @NotBlank
     private String zipCode;
     @NotBlank
+    @CreditCardNumber
     private String cardNumber;
 }
