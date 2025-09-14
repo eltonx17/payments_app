@@ -8,16 +8,14 @@ import com.ezycollect.payment.util.UrlValidationUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -44,11 +42,10 @@ class WebhookServiceImplTest {
     void notifyWebhooks_noWebhooks() {
         when(webhookRepository.findAll()).thenReturn(Collections.emptyList());
 
-        ResponseEntity<Object> response = webhookService.notifyWebhooks(new Payment());
+        webhookService.notifyWebhooks(new Payment());
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody() instanceof Map);
-        assertEquals("No webhooks registered", ((Map<?, ?>) response.getBody()).get("status"));
+        verify(webhookRepository).findAll();
+        verifyNoInteractions(webhookNotificationService);
     }
 
     @Test
@@ -61,11 +58,9 @@ class WebhookServiceImplTest {
         when(webhookNotificationService.notifyWebhookAsync(any(Webhook.class), any(Payment.class)))
                 .thenReturn(CompletableFuture.completedFuture(true));
 
-        ResponseEntity<Object> response = webhookService.notifyWebhooks(new Payment());
+        webhookService.notifyWebhooks(new Payment());
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody() instanceof Map);
-        assertEquals("OK", ((Map<?, ?>) response.getBody()).get("status"));
+        verify(webhookNotificationService, times(1)).notifyWebhookAsync(any(Webhook.class), any(Payment.class));
     }
 
     @Test
@@ -82,11 +77,9 @@ class WebhookServiceImplTest {
         when(webhookNotificationService.notifyWebhookAsync(eq(webhook2), any(Payment.class)))
                 .thenReturn(CompletableFuture.completedFuture(false));
 
-        ResponseEntity<Object> response = webhookService.notifyWebhooks(new Payment());
+        webhookService.notifyWebhooks(new Payment());
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertTrue(response.getBody() instanceof Map);
-        assertEquals("Partial Failure", ((Map<?, ?>) response.getBody()).get("status"));
+        verify(webhookNotificationService, times(2)).notifyWebhookAsync(any(Webhook.class), any(Payment.class));
     }
 
     @Test
