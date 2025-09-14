@@ -18,7 +18,7 @@ The application is also hosted on Koyeb PaaS platform and can be accessed at: ht
 
 ## Testing
 - Run tests using `mvn test`
-- Attached simple manual testing document in docs/ folder for reference.
+- A simple manual testing document is available at [docs/tests/manual_testcases.pdf](docs/tests/manual_testcases.pdf).
 
 ### Payloads
 - OpenAPI/Swagger documentation is placed in the root of the project (openapi.yaml).
@@ -36,7 +36,7 @@ The application is also hosted on Koyeb PaaS platform and can be accessed at: ht
 9. The application does not include pagination or filtering for listing payments or webhooks. These features can be added as needed.
 10. The application does not include input validation beyond basic checks. More comprehensive validation should be implemented as needed.
 11. Front-end was optional, but has been included for completeness. It is a simple Angular app that allows users to create payments and register webhooks - does not handle complex validations etc.
-12. Async Webhook Execution is not displayed on the Angular UI, but can be monitored via logs or DB entries. For a production system, this could be handled using SSE or WebSocket to provide real-time updates to the user.
+12. **Async Webhook Execution is not displayed on the Angular UI, but can be monitored via logs or DB entries.** For a production system, this could be handled using SSE or WebSocket to provide real-time updates to the user.
 13. CORS is enabled for all origins for simplicity. In a production system, this should be restricted to trusted domains.
 
 ## High Level Architecture
