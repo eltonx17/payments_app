@@ -5,6 +5,7 @@ import com.ezycollect.payment.dto.CreatePaymentResponse;
 import com.ezycollect.payment.exception.DatabaseException;
 import com.ezycollect.payment.dto.mapper.PaymentMapper;
 import com.ezycollect.payment.dto.model.Payment;
+import com.ezycollect.payment.exception.PaymentFailedException;
 import com.ezycollect.payment.service.PaymentService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_CREATED;
-import static com.ezycollect.payment.config.PaymentConstants.PAYMENT_FAILED;
 
 @RestController
 @RequestMapping("/v1/payments")
@@ -46,10 +46,10 @@ public class PaymentController {
             return new ResponseEntity<>(paymentMapper.toDto(createdPayment, PAYMENT_CREATED, null), HttpStatus.CREATED);
         } catch (DatabaseException e) {
             log.error("Payment Creation Failed for RequestID: {}", createPaymentRequest.getRequestId());
-            return new ResponseEntity<>(paymentMapper.toDto(new Payment(), PAYMENT_FAILED, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new PaymentFailedException(e.getMessage());
         } catch (IllegalArgumentException e) {
             log.error("Invalid arguments for payment creation for RequestID: {}", createPaymentRequest.getRequestId());
-            return new ResponseEntity<>(paymentMapper.toDto(new Payment(), PAYMENT_FAILED, e.getMessage()), HttpStatus.BAD_REQUEST);
+            throw new PaymentFailedException(e.getMessage());
         }
     }
 }

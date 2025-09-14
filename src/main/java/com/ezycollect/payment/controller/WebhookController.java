@@ -3,11 +3,11 @@ package com.ezycollect.payment.controller;
 import com.ezycollect.payment.dto.RegisterWebhookRequest;
 import com.ezycollect.payment.dto.RegisterWebhookResponse;
 import com.ezycollect.payment.exception.DatabaseException;
+import com.ezycollect.payment.exception.WebhookRegistrationFailedException;
 import com.ezycollect.payment.service.WebhookService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.ezycollect.payment.config.PaymentConstants.REGISTER_WEBHOOK_FAILED;
 import static com.ezycollect.payment.config.PaymentConstants.REGISTER_WEBHOOK_SUCCESS;
 
 @RestController
@@ -39,9 +38,9 @@ public class WebhookController {
             webhookService.registerWebhook(registerWebhookRequest.getUrl());
             return ResponseEntity.ok(new RegisterWebhookResponse(REGISTER_WEBHOOK_SUCCESS));
         } catch (DatabaseException e) {
-            return new ResponseEntity<>(new RegisterWebhookResponse(REGISTER_WEBHOOK_FAILED, e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new WebhookRegistrationFailedException(e.getMessage());
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(new RegisterWebhookResponse(REGISTER_WEBHOOK_FAILED, e.getMessage()), HttpStatus.BAD_REQUEST);
+            throw new WebhookRegistrationFailedException(e.getMessage());
         }
     }
 }
