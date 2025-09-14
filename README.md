@@ -55,7 +55,7 @@ The application is also hosted on Koyeb PaaS platform and can be accessed at: ht
 
 ## Payloads
 - OpenAPI/Swagger documentation is placed in the root of the project (openapi.yaml).
-- Access auto-generated Spring Doc Swagger UI at `http://localhost:8080/swagger-ui/index.html` for API documentation (missing failure scenario).
+- Can also be accessed directly in Swagger UI at `http://localhost:8080/swagger-ui/index.html` (local) OR `https://payment-eg.koyeb.app/swagger-ui/index.html` for detailed API documentation
 
 ## API Endpoints
 
